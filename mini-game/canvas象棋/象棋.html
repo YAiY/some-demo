@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<style type="text/css">
+		*{ margin: 0; padding: 0; }
+		html,body{ height: 100%; }
+		canvas {
+			position: absolute;
+			transform: translate(-50%, -50%);
+			top: 50%;
+			left: 50%;
+			display: block;
+			width: calc(400px + 50px);
+			height: calc(450px + 50px);
+			border: 1px solid;
+			margin: 0 auto;
+			background-color: #EAC591;
+		}
+
+	</style>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+	<script src="./Chess.js"></script>
+	<script src="./piecesMove.js"></script>
+	<script type="text/javascript">
+		var canvas = document.getElementById('canvas');
+		var ctx = canvas.getContext('2d');
+		var ctxW = 400; // 棋盘内部 width  400 9条线
+		var ctxH = 450; // 棋盘内部 height 450 10条线
+		canvas.setAttribute('width', ctxW + 50)
+		canvas.setAttribute('height', ctxH + 50)
+		const arrRed = [
+			{ text: '帅', x: 4, y: 0 },
+			{ text: '仕', x: 3, y: 0 },
+			{ text: '仕', x: 5, y: 0 },
+			{ text: '相', x: 2, y: 0 },
+			{ text: '相', x: 6, y: 0 },
+			{ text: '马', x: 1, y: 0 },
+			{ text: '马', x: 7, y: 0 },
+			{ text: '车', x: 0, y: 0 },
+			{ text: '车', x: 8, y: 0 },
+			{ text: '炮', x: 1, y: 2 },
+			{ text: '炮', x: 7, y: 2 },
+			{ text: '兵', x: 0, y: 3 },
+			{ text: '兵', x: 2, y: 3 },
+			{ text: '兵', x: 4, y: 3 },
+			{ text: '兵', x: 6, y: 3 },
+			{ text: '兵', x: 8, y: 3 }
+		]
+		const arrBlack = [
+			{ text: '将', x: 4, y: 9 },
+			{ text: '士', x: 3, y: 9 },
+			{ text: '士', x: 5, y: 9 },
+			{ text: '象', x: 2, y: 9 },
+			{ text: '象', x: 6, y: 9 },
+			{ text: '马', x: 1, y: 9 },
+			{ text: '马', x: 7, y: 9 },
+			{ text: '車', x: 0, y: 9 },
+			{ text: '車', x: 8, y: 9 },
+			{ text: '炮', x: 1, y: 7 },
+			{ text: '炮', x: 7, y: 7 },
+			{ text: '卒', x: 0, y: 6 },
+			{ text: '卒', x: 2, y: 6 },
+			{ text: '卒', x: 4, y: 6 },
+			{ text: '卒', x: 6, y: 6 },
+			{ text: '卒', x: 8, y: 6 }
+		]
+		
+		new Chess({
+			canvas,
+			ctx, // canvas
+			ctxW, // canvas width
+			ctxH, // canvas height
+			arrRed, // init array red
+			arrBlack // init array black
+		})
+	</script>
+</body>
+</html>
