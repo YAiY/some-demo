@@ -23,7 +23,7 @@
 </head>
 <body>
 	<canvas id="canvas"></canvas>
-	<script src="./Chess.js"></script>
+	<script src="./Chessboard.js"></script>
 	<script src="./piecesMove.js"></script>
 	<script type="text/javascript">
 		var canvas = document.getElementById('canvas');
@@ -68,8 +68,7 @@
 			{ text: '卒', x: 6, y: 6 },
 			{ text: '卒', x: 8, y: 6 }
 		]
-		
-		new Chess({
+		new piecesMove({
 			canvas,
 			ctx, // canvas
 			ctxW, // canvas width

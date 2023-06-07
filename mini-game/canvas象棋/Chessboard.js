@@ -14,6 +14,7 @@ class Chess {
       black: arrBlack
     } // 所有棋子 集合
     this.allChess = this.chessPiecesArr.red.concat(this.chessPiecesArr.black)
+    this.currentCheck = null // 当前被点击棋子
     this.init()
     // this.addEvent()
   }
@@ -125,28 +126,51 @@ class Chess {
       // console.log(this.allChess);
       let x = e.offsetX - 25
       let y = e.offsetY - 25
-      let currentCheck = null // 当前被点击棋子
+      let clickItem = null
       // 循环判断 是否点击到棋子
-      this.allChess.forEach(item => {
-        // 点击到棋子
+      this.allChess.some(item => {
         if (this.clickScope(x,y, item.x, item.y)) {
-          if (item.isCheck) {
-            item.isCheck = false
-            currentCheck = null
-          } else {
-            item.isCheck = true
-          }
-        } else {
-          item.isCheck = false
-        }
-        if (item.isCheck && !currentCheck) {
-          currentCheck = item
+          clickItem = item
+          return true
         }
       })
+      // 存在已选棋子
+      if (this.currentCheck) {
+        // 是否再次点击到棋子
+        if (clickItem) { 
+          console.log(this.currentCheck, clickItem);
+          // 是否为同一棋子
+          if (clickItem.key === this.currentCheck.key) {
+            clickItem.isCheck = false
+            this.currentCheck = null
+          } else if (clickItem.type === this.currentCheck.type){ // 是否为同一阵营棋子
+            this.currentCheck.isCheck = false
+            clickItem.isCheck = true
+            this.currentCheck = clickItem
+          } else {
+            this.dropPointClick(x, y, clickItem)
+          }
+        } else {
+          // 判断是否点击到棋子落点
+          this.dropPointClick(x, y)
+        }
+        
+      } else {
+        if (clickItem) {
+          clickItem.isCheck = true
+        }
+      }
+      if (clickItem && clickItem.isCheck && !this.currentCheck) {
+        this.currentCheck = clickItem
+      }
       // 当前被点击棋子
-      this.checkStatus(currentCheck)
+      this.checkStatus(this.currentCheck)
     }
     // this.canvas.addEventListener('click', this.ctxEvent())
+  }
+  // 点击事件的逻辑
+  handleClickLogic() {
+
   }
   // ctxEvent(e) 
   // 绘制点击后棋子状态
@@ -189,6 +213,19 @@ class Chess {
     }
     this.droppoint(item)
   }
+  // 判断是否点击到棋子落点
+  dropPointClick(x, y, clickItem) {
+    console.log(x, y, clickItem);
+    // if (this.currentCheck.jumpDrop) {
+    //   this.currentCheck.jumpDrop.forEach(item => {
+
+    //   })
+    // } else {
+      // 点击空白处 - 取消选中状态
+      this.currentCheck.isCheck = false
+      this.currentCheck = null
+    // }
+  }
   // 重置画布
   reset() {
     this.ctx.clearRect(0, 0,this.ctxW + 50,this.ctxH + 50);
@@ -209,63 +246,11 @@ class Chess {
 
   // 判断落点是否合规
   judgmentPoint(pointArr) {
-    return pointArr
-  }
+    // pointArr.forEach(item => {
 
-  // 计算并绘制棋子可以落的点
-  droppoint(item) {
-    if (!item) return
-    let arr = []
-    // + 25 焦点从棋子右上角回到棋子中心
-    let x = item.x + 25
-    let y = item.y + 25
-    let type = item.key.split('-')[0] // 棋子阵营
-    switch (item.text) {
-      case '帅':
-        // 可落点：田字格、空白点、黑棋点
-        let centerW = this.ctxW/2
-        let centerH = this.ctxH + 50
-        for (let i = 0; i < this.allChess.length; i++) {
-          // if (this.allChess[i].key === item.key) continue
-          if (this.allChess[i].key.includes(type)) continue
-            // console.log(this.allChess[i])
-          // if (condition) {
-          // }
-        }
-        break;
-      case '仕':
-        break;
-      case '相':
-        break;
-      case '马':
-        break;
-      case '车':
-        break;
-      case '車':
-        break;
-      case '炮':
-        break;
-      case '兵':
-        this.protractPoint([
-          // 向前一步
-          {x, y: y + 50},
-          // 向坐一步
-          {x: x + 50, y},
-          // 向右一步
-          {x: x - 50, y},
-        ])
-        break;
-      case '将':
-        break;
-      case '士':
-        break;
-      case '象':
-        break;
-      case '卒':
-        break;
-      default:
-        break;
-    }
+    // })
+    this.currentCheck.jumpDrop = pointArr
+    return pointArr
   }
   
   // 点击范围判断 是否点击到棋子
@@ -283,5 +268,8 @@ class Chess {
     }
     return isOk
   }
-  
+  // 棋子落点
+  piecesMove() {
+    
+  }
 }
